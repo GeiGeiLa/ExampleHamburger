@@ -33,7 +33,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.hamburger.DeviceControlActivity;
-import com.example.hamburger.DummyActivity;
 import com.example.hamburger.R;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -71,15 +70,7 @@ public class HomeFragment extends Fragment {
 //            }
 //        });
         btn_newActivity = root.findViewById(R.id.btn_newActivity);
-        btn_newActivity.setOnClickListener(new Button.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                Intent intent = new Intent(HomeFragment.this.getActivity(), DummyActivity.class);
-                startActivity(intent);
-            }
-        });
+
         final Button btn_sendNotification = root.findViewById(R.id.btn_notify);
         btn_sendNotification.setOnClickListener( new Button.OnClickListener()
         {

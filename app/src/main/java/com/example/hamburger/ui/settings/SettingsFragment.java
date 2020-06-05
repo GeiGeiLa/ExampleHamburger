@@ -1,5 +1,7 @@
 package com.example.hamburger.ui.settings;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.view.LayoutInflater;
@@ -7,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -18,39 +22,47 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hamburger.DummyActivity;
+import com.example.hamburger.MainActivity;
+import com.example.hamburger.MyAdapter;
 import com.example.hamburger.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.ArrayList;
+import java.util.zip.Inflater;
+
 public class SettingsFragment extends PreferenceFragmentCompat
-//        implements AdapterView.OnItemClickListener
 {
+    private ArrayList<String> mData = new ArrayList<>();
     private View currentView;
-    private SettingsViewModel slideshowViewModel;
-//    @Override
-//    public void onCreate(Bundle savedInstanceState){
-//        super.onCreate(savedInstanceState);
-//        addPreferencesFromResource(R.xml.preferences);
-//    }
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         // Indicate here the XML resource you created above that holds the preferences
-//        setPreferencesFromResource(R.xml.preferences, rootKey);
         addPreferencesFromResource(R.xml.preferences);
-
     }
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        slideshowViewModel =
-                new ViewModelProvider(this).get(SettingsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_settings, container, false);
+        View root = super.onCreateView(inflater, container, savedInstanceState);
         this.currentView = root;
+        Preference preference = findPreference("btn_test");
+        preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                Intent intent = new Intent(getContext(), DummyActivity.class);
+                startActivity(intent);
+                return false;
+            }
+        });
         return root;
     }
 
-//    @Override
-//    public void onItemClick(AdapterView<?> parent, View view, int position,long id) {
-//        Snackbar.make(this.currentView,"點擊項目："+position, Snackbar.LENGTH_SHORT).show();
-//    }
 }

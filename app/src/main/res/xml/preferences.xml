@@ -1,4 +1,8 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout="@layout/fragment_settings"
+    >
     <PreferenceCategory
         android:title="程式設定">
         <SwitchPreference
@@ -18,5 +22,10 @@
             android:title="緊急連絡人"
             android:summary="偵測到摔倒時會寄發簡訊給指定的人"/>
     </PreferenceCategory>
+    <Preference
+        android:title="defaultTitle"
+        android:key="btn_test"
+        android:summary="開始測試">
 
+    </Preference>
 </PreferenceScreen>

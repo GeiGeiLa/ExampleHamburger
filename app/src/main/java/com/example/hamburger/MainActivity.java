@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Log.i(TAG, "clicked nav item");
                 Fragment fragment = null;
+
                 // 點選時收起選單
                 drawerLayout.closeDrawer(GravityCompat.START);
                 // 取得選項id
@@ -91,8 +92,9 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_settings:
                         //                    // 按下「使用說明」要做的事
 //                    Toast.makeText(MainActivity.this, "使用說明", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(MainActivity.this, DummyActivity.class);
-                        startActivity(intent);
+                        //navigation_view.getCheckedItem().setChecked(false);
+                        FragmentManager fm = getSupportFragmentManager();
+                        fm.beginTransaction().replace(R.id.nav_host_fragment, new SettingsFragment()).commit();
                         return true;
                 }
                 if(fragment != null) // maybe always taken?
@@ -113,6 +115,25 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    void InitializeScanner()
+    {
+        askForPermission();
+        mHandler = new Handler();
+        mLeDeviceListAdapter = new LeDeviceListAdapter();
+
+        // FIXME:
+        //setListAdapter(mLeDeviceListAdapter);
+        bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            Log.e("","bad is null");
+            finish();
+            return;
+        }
+        scanLeDevice(true);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
         setOnClickForNavBar();
         FragmentManager fm = getSupportFragmentManager();
         fm.beginTransaction().replace(R.id.nav_host_fragment, new HomeFragment()).commit();
-
+        InitializeScanner();
     }
 
     @Override
@@ -207,25 +228,6 @@ public class MainActivity extends AppCompatActivity {
     }
     BluetoothManager bluetoothManager;
 
-    void init()
-    {
-        mHandler = new Handler();
-        mLeDeviceListAdapter = new LeDeviceListAdapter();
-
-        // FIXME:
-        //setListAdapter(mLeDeviceListAdapter);
-        bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            Log.e("","bad is null");
-            finish();
-            return;
-        }
-        scanLeDevice(true);
-
-    }
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
 
@@ -259,6 +261,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     mScanning = false;
+                    Log.e(TAG,"STOP SCANNING");
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
                     invalidateOptionsMenu();
                 }
